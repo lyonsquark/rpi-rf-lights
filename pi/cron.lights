@@ -1,0 +1,44 @@
+# Edit this file to introduce tasks to be run by cron.
+# 
+# Each task to run has to be defined through a single line
+# indicating with different fields when the task will be run
+# and what command to run for the task
+# 
+# To define the time you can provide concrete values for
+# minute (m), hour (h), day of month (dom), month (mon),
+# and day of week (dow) or use '*' in these fields (for 'any').# 
+# Notice that tasks will be started based on the cron's system
+# daemon's notion of time and timezones.
+# 
+# Output of the crontab jobs (including errors) is sent through
+# email to the user the crontab file belongs to (unless redirected).
+# 
+# For example, you can run a backup of all your user accounts
+# at 5 a.m every week with:
+# 0 5 * * 1 tar -zcf /var/backups/home.tgz /home/
+# 
+# For more information see the manual pages of crontab(5) and cron(8)
+# 
+# m h  dom mon dow   command
+@reboot              sleep 30 ; ~/init/start
+
+# Weekdays, turn on upstairs light at 7am and off at 8am
+0   7   *   *  1-5   ~/homeControl/homeCommand.py 3 on
+0   8   *   *  1-5   ~/homeControl/homeCommand.py 3 off
+
+# Weekends, turn on upstairs light with delay (7am +/- 60, 8:30am +/- 60
+0  7    *   *  6,7   ~/homeControl/homeDelay.py 3 on 60
+30  8   *   *  6,7   ~/homeControl/homeDelay.py 3 off 60
+
+# At night, turn on upstairs light with delay
+0  17    *   *  *   ~/homeControl/homeDelay.py 3 on 90
+0  20    *   *  *   ~/homeControl/homeDelay.py 3 off 90
+
+# Office light on around 5 and off around midnight
+0  17  *    *   *    ~/homeControl/homeDelay.py 2 on 120
+30 23  *    *   *    ~/homeControl/homeDelay.py 2 off 60
+
+# Living room light on around 3:30 and off around midnight
+30 15  *    *   *    ~/homeControl/homeDelay.py 1 on 45
+30 23  *    *   *    ~/homeControl/homeDelay.py 1 off 60
+
